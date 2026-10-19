@@ -1,4 +1,4 @@
-# ordistar.me
+# ord1star.github.io
 
 Personal portfolio of **Hannoun Amine Amar**, AI engineer and full-stack developer.
 
