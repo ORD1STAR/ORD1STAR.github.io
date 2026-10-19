@@ -40,61 +40,63 @@
     return a + b + c + n;
   }
 
-  /* ---------- hero canvas: slow, soft, capped at 30 fps ---------- */
-  var hero = { cv: $('#eeg'), amp: 1, visible: true, my: -999, last: 0 };
-  hero.ctx = hero.cv.getContext('2d');
-  var names = ['Fz', 'Cz', 'Pz', 'C3', 'C4', 'Oz'];
-  function heroSize() {
-    var dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-    hero.W = hero.cv.clientWidth; hero.H = hero.cv.clientHeight;
-    hero.cv.width = hero.W * dpr; hero.cv.height = hero.H * dpr;
-    hero.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  }
-  function drawHero(now) {
-    var ctx = hero.ctx, W = hero.W, H = hero.H;
-    var t = reduce ? 40 : (now - t0) / 1000 + 20;
-    var speed = Math.max(40, W / 26);
-    ctx.clearRect(0, 0, W, H);
-    var g = ctx.createLinearGradient(0, 0, W, 0);
-    g.addColorStop(0, 'rgba(103,232,249,.10)'); g.addColorStop(0.5, 'rgba(103,232,249,.38)'); g.addColorStop(1, 'rgba(103,232,249,.6)');
-    ctx.lineWidth = 1.25; ctx.lineJoin = 'round'; ctx.lineCap = 'round';
-    var top = H * 0.17, span = H * 0.7, amp0 = Math.min(30, H * 0.035) * hero.amp;
-    ctx.font = '11px "IBM Plex Mono", monospace';
-    for (var i = 0; i < names.length; i++) {
-      var by = top + span * i / (names.length - 1);
-      var boost = 1 + 0.55 * Math.exp(-Math.pow((hero.my - by) / 140, 2));
-      ctx.beginPath();
-      for (var x = 0; x <= W + 3; x += 3) {
-        var y = by - sig(i, t - (W - x) / speed) * amp0 * boost;
-        if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-      }
-      ctx.strokeStyle = g; ctx.stroke();
-      ctx.fillStyle = 'rgba(140,145,166,.45)';
-      ctx.fillText(names[i], W - 34, by - 14);
-    }
-  }
-  function heroLoop(now) {
-    if (hero.visible && !document.hidden && now - hero.last > 33) { hero.last = now; drawHero(now); }
-    requestAnimationFrame(heroLoop);
-  }
-  heroSize(); addEventListener('resize', heroSize);
-  if (reduce) drawHero(performance.now());
-  else {
-    requestAnimationFrame(heroLoop);
-    var heroEl = $('.hero');
-    heroEl.addEventListener('pointermove', function (e) { hero.my = e.clientY - heroEl.getBoundingClientRect().top; });
-    heroEl.addEventListener('pointerleave', function () { hero.my = -999; });
-    new IntersectionObserver(function (en) { hero.visible = en[0].isIntersecting; }).observe(heroEl);
+  /* ---------- hero: cursor-lit grid, decoding headline, terminal ---------- */
+  var heroEl = $('.hero');
+  if (!reduce && matchMedia('(pointer: fine)').matches) {
+    var hx = 0, hy = 0, hq = false;
+    heroEl.addEventListener('pointermove', function (e) {
+      var r = heroEl.getBoundingClientRect(); hx = e.clientX - r.left; hy = e.clientY - r.top;
+      if (!hq) { hq = true; requestAnimationFrame(function () { heroEl.style.setProperty('--mx', hx + 'px'); heroEl.style.setProperty('--my', hy + 'px'); hq = false; }); }
+    });
   }
 
-  /* ---------- intro ---------- */
+  function scramble(el, dur) {
+    var nodes = [];
+    (function walk(n) { Array.prototype.forEach.call(n.childNodes, function (c) {
+      if (c.nodeType === 3 && c.nodeValue.trim()) nodes.push({ n: c, t: c.nodeValue });
+      else if (c.nodeType === 1) walk(c); }); })(el);
+    var chars = '01/\\<>[]{}#%$&*+=?', start = performance.now();
+    function frame(now) {
+      var p = Math.min(1, (now - start) / dur);
+      nodes.forEach(function (o) {
+        var out = '';
+        for (var i = 0; i < o.t.length; i++) {
+          var ch = o.t[i];
+          out += (ch === ' ' || i / o.t.length < p * 1.2 - 0.1) ? ch : chars[Math.floor(Math.random() * chars.length)];
+        }
+        o.n.nodeValue = out;
+      });
+      if (p < 1) requestAnimationFrame(frame); else nodes.forEach(function (o) { o.n.nodeValue = o.t; });
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function runTerm() {
+    var term = $('#term'), ps = $$('p', term), cmds = $$('.cmd', term);
+    if (reduce) { cmds.forEach(function (c) { c.textContent = c.dataset.t; }); ps.forEach(function (p) { p.style.opacity = 1; }); return; }
+    var i = 0;
+    function next() {
+      if (i >= cmds.length) return;
+      var cmd = cmds[i], line = cmd.parentNode, out = line.nextElementSibling, text = cmd.dataset.t, k = 0;
+      line.style.opacity = 1;
+      (function type() {
+        cmd.textContent = text.slice(0, ++k);
+        if (k < text.length) setTimeout(type, 42 + Math.random() * 40);
+        else setTimeout(function () { out.style.opacity = 1; i++; setTimeout(next, 380); }, 220);
+      })();
+    }
+    next();
+  }
+
   gsap.set('[data-hero]', { y: 14 });
   var intro = gsap.timeline({ delay: 0.15, defaults: { ease: 'power4.out' } });
-  intro.to('h1 .ln > span', { y: 0, duration: 1.3, stagger: 0.14 })
-       .to('[data-hero]', { opacity: 1, y: 0, duration: 0.9, stagger: 0.1 }, '-=0.8');
-  gsap.to('.hero-inner', { yPercent: -12, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
-  gsap.to(hero, { amp: 0.3, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
-  gsap.to('#eeg', { opacity: 0.15, ease: 'none', scrollTrigger: { trigger: '.hero', start: '30% top', end: 'bottom top', scrub: true } });
+  intro.to('h1 .ln > span', { y: 0, duration: 1.2, stagger: 0.14 })
+       .to('[data-hero]', { opacity: 1, y: 0, duration: 0.9, stagger: 0.1 }, '-=0.8')
+       .add(function () { setTimeout(runTerm, 250); }, '-=0.3');
+  if (!reduce) { $$('h1 .ln > span').forEach(function (el, i) { setTimeout(function () { scramble(el, 1000); }, 250 + i * 160); }); }
+  gsap.to('.hero-inner', { yPercent: -10, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+  gsap.to('.term', { yPercent: -6, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+  gsap.to('.hero-bg', { opacity: 0.2, ease: 'none', scrollTrigger: { trigger: '.hero', start: '30% top', end: 'bottom top', scrub: true } });
 
   /* ---------- headings: masked line reveal; section rules ---------- */
   $$('h2').forEach(function (h) {
@@ -130,7 +132,14 @@
     scope.mode = i; scope.since = performance.now();
     stageLis.forEach(function (li, k) { li.classList.toggle('on', k === i); });
     $('#scopeLabel').textContent = labels[i]; $('#scopeFoot').textContent = foots[i];
+    var li = stageLis[i], det = $('#stageDetail');
+    if (det) {
+      var ps = $$('p', li);
+      $('.sd-text', det).textContent = ps[0] ? ps[0].textContent : '';
+      $('.sd-stat', det).textContent = ps[1] ? ps[1].textContent : '';
+    }
   }
+  function stageFor(p) { return p >= 0.8 ? N_STAGES - 1 : Math.min(N_STAGES - 2, Math.floor(p / 0.8 * (N_STAGES - 1))); }
   function scopeSize() {
     var dpr = Math.min(window.devicePixelRatio || 1, 1.5);
     scope.W = scope.cv.clientWidth; scope.H = scope.cv.clientHeight;
@@ -253,8 +262,8 @@
   var mm = gsap.matchMedia();
   mm.add('(min-width: 901px)', function () {
     ScrollTrigger.create({
-      trigger: '.thesis-pin', start: 'top top', end: '+=3200', pin: true, scrub: true, anticipatePin: 1,
-      onUpdate: function (s) { setStage(Math.min(N_STAGES - 1, Math.floor(s.progress * N_STAGES))); }
+      trigger: '.thesis-pin', start: 'top top', end: '+=3600', pin: true, scrub: true, anticipatePin: 1,
+      onUpdate: function (s) { setStage(stageFor(s.progress)); }
     });
   });
   mm.add('(max-width: 900px)', function () {

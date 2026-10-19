@@ -34,23 +34,35 @@
 <main>
 <!-- HERO -->
 <section class="hero" id="top">
-  <canvas id="eeg" aria-hidden="true"></canvas>
+  <div class="hero-bg" aria-hidden="true">
+    <i class="blob b1"></i><i class="blob b2"></i>
+    <i class="grid"></i><i class="spot"></i>
+  </div>
   <div class="hero-inner">
     <p class="kicker mono" data-hero>Hannoun Amine Amar &middot; Algeria</p>
-    <h1>
+    <h1 aria-label="Signals in. Decisions out.">
       <span class="ln"><span>Signals in.</span></span>
       <span class="ln"><span>Decisions <em>out.</em></span></span>
     </h1>
-    <p class="lede" data-hero>AI engineer and full-stack developer. I decode EEG, build machine-learning pipelines, and ship the software that sits around them.</p>
+    <p class="lede" data-hero>AI engineer and full-stack developer. I build machine-learning pipelines, decode brain signals, and ship the software that sits around them.</p>
     <div class="cta" data-hero>
       <a class="btn primary" href="#thesis">Read the thesis <span aria-hidden="true">&darr;</span></a>
       <a class="btn" href="#work">See the work</a>
     </div>
   </div>
-  <dl class="hero-meta mono" data-hero>
-    <div><dt>channels</dt><dd>Fz Cz Pz C3 C4 Oz</dd></div>
-    <div><dt>status</dt><dd><i class="dot"></i> open to roles</dd></div>
-  </dl>
+  <aside class="term" data-hero aria-label="About, as a terminal session">
+    <div class="term-top mono"><span>session.log</span><span>live</span></div>
+    <div class="term-body mono" id="term" aria-live="off">
+      <p><b>H.A.A:\&gt;</b> <span class="cmd" data-t="whoami"></span></p>
+      <p class="out" data-o>Hannoun Amine Amar</p>
+      <p><b>H.A.A:\&gt;</b> <span class="cmd" data-t="focus"></span></p>
+      <p class="out" data-o>AI engineering &middot; EEG / BCI &middot; full-stack</p>
+      <p><b>H.A.A:\&gt;</b> <span class="cmd" data-t="projects --count"></span></p>
+      <p class="out" data-o>16 public, newest first</p>
+      <p><b>H.A.A:\&gt;</b> <span class="cmd" data-t="status"></span></p>
+      <p class="out ok" data-o><i class="dot"></i> open to roles<span class="caret"></span></p>
+    </div>
+  </aside>
   <a class="scrollcue mono" href="#thesis" data-hero>scroll</a>
 </section>
 
@@ -70,6 +82,7 @@
         <li data-stage="5"><span class="n mono">06</span><div><b>Replay live</b><p>A streaming decoder over Lab Streaming Layer, replaying a held-out recording.</p><p class="stat mono">17&ndash;19&nbsp;ms per decision &middot; every onset detected</p></div></li>
         <li data-stage="6"><span class="n mono">07</span><div><b>Verdict</b><p>Reported as it came out, including what did not work.</p><p class="stat mono">3-class 0.385 vs 0.333 chance &middot; brain switch about 0.60&ndash;0.64 after review &middot; push vs walk not decodable</p></div></li>
       </ol>
+      <div class="stage-detail" id="stageDetail" aria-live="polite"><p class="sd-text"></p><p class="sd-stat mono"></p></div>
     </div>
     <div class="scope" aria-hidden="true">
       <div class="scope-top mono"><span id="scopeLabel">01 &middot; record</span><span>fig. 1</span></div>
