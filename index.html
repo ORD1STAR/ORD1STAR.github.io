@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hannoun Amine Amar — AI Engineer &amp; Full-Stack Developer</title>
+<meta name="description" content="AI engineer and full-stack developer from Algeria. EEG brain-computer interfaces, machine learning pipelines, and the software around them.">
+<meta property="og:title" content="Hannoun Amine Amar — AI Engineer & Full-Stack Developer">
+<meta property="og:description" content="Signals in. Decisions out. EEG decoding, ML pipelines and full-stack products.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://ordistar.me/assets/og.png">
+<meta name="theme-color" content="#0a0b0f">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,500;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="progress" aria-hidden="true"><i></i></div>
+
+<header class="bar">
+  <a class="mark" href="#top" aria-label="Back to top">HA<span>/</span></a>
+  <nav aria-label="Primary">
+    <a href="#thesis">Thesis</a>
+    <a href="#findings">Findings</a>
+    <a href="#work">Work</a>
+    <a href="#stack">Stack</a>
+    <a href="#path">Path</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <div class="clock mono" aria-hidden="true"><b></b> rec <span id="clock">00:00.0</span></div>
+</header>
+
+<main>
+<!-- HERO -->
+<section class="hero" id="top">
+  <canvas id="eeg" aria-hidden="true"></canvas>
+  <div class="hero-inner">
+    <p class="kicker mono" data-hero>Hannoun Amine Amar &middot; Algeria</p>
+    <h1>
+      <span class="ln"><span>Signals in.</span></span>
+      <span class="ln"><span>Decisions <em>out.</em></span></span>
+    </h1>
+    <p class="lede" data-hero>AI engineer and full-stack developer. I decode EEG, build machine-learning pipelines, and ship the software that sits around them.</p>
+    <div class="cta" data-hero>
+      <a class="btn primary" href="#thesis">Read the thesis <span aria-hidden="true">&darr;</span></a>
+      <a class="btn" href="#work">See the work</a>
+    </div>
+  </div>
+  <dl class="hero-meta mono" data-hero>
+    <div><dt>channels</dt><dd>Fz Cz Pz C3 C4 Oz</dd></div>
+    <div><dt>status</dt><dd><i class="dot"></i> open to roles</dd></div>
+  </dl>
+  <a class="scrollcue mono" href="#thesis" data-hero>scroll</a>
+</section>
+
+<!-- THESIS (pinned) -->
+<section class="thesis" id="thesis">
+  <div class="thesis-pin">
+    <div class="thesis-copy">
+      <p class="eyebrow mono">Master&rsquo;s final-year project</p>
+      <h2>A brain switch,<br>stress-tested.</h2>
+      <p class="thesis-desc">Detecting when someone moves from rest to a command, from 30-channel EEG, for a person the model has never seen. The interesting part was not the model. It was proving the number meant something.</p>
+      <ol class="stages" id="stages">
+        <li data-stage="0"><span class="n mono">01</span><div><b>Record</b><p>10 participants, 28 recordings, 30 channels at 500&nbsp;Hz, two cue protocols.</p></div></li>
+        <li data-stage="1"><span class="n mono">02</span><div><b>Window</b><p>Causal filters with carried state, 2&nbsp;s windows with a 0.5&nbsp;s hop. Nothing sees the future.</p></div></li>
+        <li data-stage="2"><span class="n mono">03</span><div><b>Describe</b><p>Covariance matrices, causal Riemannian re-centering, tangent-space and log-power features.</p></div></li>
+        <li data-stage="3"><span class="n mono">04</span><div><b>Decode</b><p>Riemann fusion, ShallowConvNet, EEGNet and a fixed 50/50 ensemble, scored on held-out people.</p></div></li>
+        <li data-stage="4"><span class="n mono">05</span><div><b>Doubt it</b><p>Drift-matched null models, a time-only control, nested selection and an independent code review.</p></div></li>
+        <li data-stage="5"><span class="n mono">06</span><div><b>Replay live</b><p>A streaming decoder over Lab Streaming Layer: 17 to 19&nbsp;ms per decision.</p></div></li>
+      </ol>
+    </div>
+    <div class="scope" aria-hidden="true">
+      <div class="scope-top mono"><span id="scopeLabel">01 &middot; record</span><span>fig. 1</span></div>
+      <canvas id="scopeCanvas"></canvas>
+      <div class="scope-foot mono" id="scopeFoot">30 ch &middot; 500 Hz</div>
+    </div>
+  </div>
+</section>
+
+<!-- FINDINGS -->
+<section class="findings" id="findings">
+  <header class="sec-head">
+    <p class="eyebrow mono">What the data said</p>
+    <h2>Negative results,<br>reported.</h2>
+    <p class="sec-sub">Every figure below comes from the repository&rsquo;s result files. Where a number looked too good, I tried to break it first.</p>
+  </header>
+  <div class="cards">
+    <article class="card c-wide" data-reveal>
+      <p class="mono tag">3-class, idle / push / walk</p>
+      <p class="big"><span data-count="0.385" data-dec="3">0.385</span></p>
+      <p class="cap">balanced accuracy. Chance is 0.333 and a drift-matched null scores 0.324. Barely above chance, and written down as such.</p>
+      <div class="meter" style="--v:38.5;--b:33.3"><i></i><u></u></div>
+    </article>
+    <article class="card" data-reveal>
+      <p class="mono tag">Push vs walk, new person</p>
+      <p class="big small2"><span data-count="0.514" data-dec="3">0.514</span><em>vs</em><span data-count="0.811" data-dec="3">0.811</span></p>
+      <p class="cap">AUC for EEG against a model that only knew the timestamp. A clock beat the brain, so the claim stayed out.</p>
+    </article>
+    <article class="card" data-reveal>
+      <p class="mono tag">Legacy audit, my own 2025 baselines</p>
+      <p class="big small2"><span data-count="98" data-dec="0">98</span>%<em>&rarr;</em><span data-count="36" data-dec="0">36</span>%</p>
+      <p class="cap">median balanced accuracy with random window splits, then with block splits. The leak was in my own earlier work.</p>
+    </article>
+    <article class="card c-wide" data-reveal>
+      <p class="mono tag">Rest vs command, held-out person</p>
+      <p class="big"><span data-count="0.707" data-dec="3">0.707</span><small> AUC</small></p>
+      <p class="cap">for the ensemble, with all 10 participants above 0.5. A later review found a baseline bias, so the honest range after correction is about 0.60 to 0.64.</p>
+      <div class="meter" style="--v:70.7;--b:51"><i></i><u></u></div>
+    </article>
+    <article class="card" data-reveal>
+      <p class="mono tag">Real-time replay</p>
+      <p class="big"><span data-count="17" data-dec="0">17</span><small>&ndash;19 ms</small></p>
+      <p class="cap">per decision on a CPU, with every onset detected on the held-out participant.</p>
+    </article>
+    <figure class="card figcard" data-reveal>
+      <img src="assets/img/eeg-topomaps.webp" alt="Scalp maps of alpha and beta band-power change between rest and task" loading="lazy">
+      <figcaption class="mono">What actually changes: band-power maps, rest to task. The posterior beta rise is neural (26 of 28 recordings), and also entangled with eye activity.</figcaption>
+    </figure>
+  </div>
+  <p class="more"><a href="https://github.com/ORD1STAR/eeg-motor-intent-decoder" target="_blank" rel="noopener">Read the full write-up and code <span aria-hidden="true">&rarr;</span></a></p>
+</section>
+
+<!-- WORK (horizontal) -->
+<section class="work" id="work">
+  <div class="work-pin">
+    <header class="work-head">
+      <p class="eyebrow mono">Selected work</p>
+      <h2>Things that ship.</h2>
+    </header>
+    <div class="track" id="track">
+      <article class="proj">
+        <div class="shot"><img src="assets/img/stockily-invoice.webp" alt="Stockily invoice detail" loading="lazy"></div>
+        <div class="meta"><p class="mono">2026 &middot; Nx &middot; NestJS &middot; React &middot; Prisma</p>
+          <h3>Stockily</h3>
+          <p>A multi-tenant stock, quality and invoicing platform for small businesses, built with a hexagonal architecture and 56 commits of history.</p>
+          <a href="https://github.com/ORD1STAR/stockily" target="_blank" rel="noopener">Source &rarr;</a></div>
+      </article>
+      <article class="proj">
+        <div class="shot"><img src="assets/img/elevate-hero.webp" alt="Elevate Digital landing page" loading="lazy"></div>
+        <div class="meta"><p class="mono">2026 &middot; Next.js 16 &middot; Express &middot; MongoDB</p>
+          <h3>Elevate Digital</h3>
+          <p>A trilingual storefront in Arabic, French and English with right-to-left support and three themes, including a glass one.</p>
+          <a href="https://github.com/ORD1STAR/elevate-digital" target="_blank" rel="noopener">Source &rarr;</a></div>
+      </article>
+      <article class="proj">
+        <div class="shot"><img src="assets/img/arena-board.webp" alt="Neural Arena leaderboard" loading="lazy"></div>
+        <div class="meta"><p class="mono">2025 &middot; Flask &middot; SQLite &middot; scikit-learn</p>
+          <h3>Neural Arena</h3>
+          <p>A self-hosted machine-learning competition platform with team accounts, CSV scoring and a live leaderboard.</p>
+          <a href="https://github.com/ORD1STAR/neural-arena" target="_blank" rel="noopener">Source &rarr;</a></div>
+      </article>
+      <article class="proj">
+        <div class="shot"><img src="assets/img/voxel-world.webp" alt="Voxel sandbox world" loading="lazy"></div>
+        <div class="meta"><p class="mono">2026 &middot; TypeScript &middot; Three.js</p>
+          <h3>Voxel Sandbox</h3>
+          <p>A browser voxel game with chunked procedural terrain, mining, crafting, farming and mobs.</p>
+          <a href="https://github.com/ORD1STAR/voxel-sandbox" target="_blank" rel="noopener">Source &rarr;</a></div>
+      </article>
+      <article class="proj">
+        <div class="shot"><img src="assets/img/plate-best.webp" alt="Plate packing layout found by a genetic algorithm" loading="lazy"></div>
+        <div class="meta"><p class="mono">2025 &middot; Python &middot; NumPy</p>
+          <h3>Plate Packing</h3>
+          <p>A genetic algorithm for 2D cutting-stock problems, with rotation and an evolution you can watch.</p>
+          <a href="https://github.com/ORD1STAR/genetic-plate-packing-optimizer" target="_blank" rel="noopener">Source &rarr;</a></div>
+      </article>
+      <article class="proj last">
+        <div class="meta"><p class="mono">and more</p>
+          <h3>Sixteen public repos.</h3>
+          <p>Forecasting, multi-agent chat, algorithm benchmarks, bots and a university portal. All of them have a README that you can run.</p>
+          <a class="btn primary" href="#index">See the index</a></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- INDEX -->
+<section class="index" id="index">
+  <header class="sec-head">
+    <p class="eyebrow mono">Index</p>
+    <h2>Everything public.</h2>
+  </header>
+  <ul class="rows" id="rows">
+    <li><a href="https://github.com/ORD1STAR/eeg-motor-intent-decoder" target="_blank" rel="noopener"><span class="y mono">2025&ndash;26</span><span class="t">EEG motor-intent decoder</span><span class="s mono">MNE &middot; pyRiemann &middot; PyTorch &middot; LSL</span></a></li>
+    <li><a href="https://github.com/ORD1STAR/xau-price-predictor" target="_blank" rel="noopener"><span class="y mono">2026</span><span class="t">XAU price predictor</span><span class="s mono">LightGBM &middot; XGBoost &middot; CatBoost &middot; PyTorch</span></a></li>
+    <li><a href="https://github.com/ORD1STAR/neural-arena" target="_blank" rel="noopener"><span class="y mono">2025</span><span class="t">Neural Arena</span><span class="s mono">Flask &middot; scikit-learn</span></a></li>
+    <li><a href="https://github.com/ORD1STAR/multi-agent-chat-arena" target="_blank" rel="noopener"><span class="y mono">2026</span><span class="t">Multi-agent chat arena</span><span class="s mono">Node.js &middot; SSE</span></a></li>
+    <li><a href="https://github.com/ORD1STAR/string-matching-and-aco-algorithms" target="_blank" rel="noopener"><span class="y mono">2024</span><span class="t">String matching &amp; ant colony</span><span class="s mono">Python</span></a></li>
+    <li><a href="https://github.com/ORD1STAR/genetic-plate-packing-optimizer" target="_blank" rel="noopener"><span class="y mono">2025</span><span class="t">Genetic plate packing</span><span class="s mono">Python &middot; NumPy</span></a></li>
+    <li><a href="https://github.com/ORD1STAR/SPS-Project" target="_blank" rel="noopener"><span class="y mono">2024</span><span class="t">DNA sequence analyzer</span><span class="s mono">Python &middot; Eel</span></a></li>
+    <li><a href="https://github.com/ORD1STAR/stockily" target="_blank" rel="noopener"><span class="y mono">2026</span><span class="t">Stockily</span><span class="s mono">NestJS &middot; React &middot; Prisma</span></a></li>
+    <li><a href="https://github.com/ORD1STAR/elevate-digital" target="_blank" rel="noopener"><span class="y mono">2026</span><span class="t">Elevate Digital</span><span class="s mono">Next.js &middot; Express &middot; MongoDB</span></a></li>
+    <li><a href="https://github.com/ORD1STAR/usthb-student-portal" target="_blank" rel="noopener"><span class="y mono">2023</span><span class="t">University portal, Licence project</span><span class="s mono">Node &middot; Socket.IO &middot; MySQL</span></a></li>
+    <li><a href="https://github.com/ORD1STAR/voxel-sandbox" target="_blank" rel="noopener"><span class="y mono">2026</span><span class="t">Voxel Sandbox</span><span class="s mono">TypeScript &middot; Three.js</span></a></li>
+    <li><a href="https://github.com/ORD1STAR/couzinet-kitchens" target="_blank" rel="noopener"><span class="y mono">2025</span><span class="t">Couzinet kitchens</span><span class="s mono">React &middot; Framer Motion</span></a></li>
+    <li><a href="https://github.com/ORD1STAR/web-design-showcase" target="_blank" rel="noopener"><span class="y mono">2025</span><span class="t">Web design showcase</span><span class="s mono">HTML &middot; Tailwind</span></a></li>
+    <li><a href="https://github.com/ORD1STAR/exam-auto-grader" target="_blank" rel="noopener"><span class="y mono">2026</span><span class="t">Exam auto-grader</span><span class="s mono">Flask</span></a></li>
+    <li><a href="https://github.com/ORD1STAR/hr-assistant-bot" target="_blank" rel="noopener"><span class="y mono">2025</span><span class="t">HR assistant bot</span><span class="s mono">discord.py &middot; Google APIs</span></a></li>
+    <li><a href="https://github.com/ORD1STAR/debibot-discord-community-bot" target="_blank" rel="noopener"><span class="y mono">2026</span><span class="t">Community Discord bot</span><span class="s mono">discord.py &middot; SQLite</span></a></li>
+  </ul>
+</section>
+
+<!-- STACK -->
+<section class="stack" id="stack" aria-label="Tools">
+  <div class="mq" data-dir="-1"><div class="mq-in"><span>Python</span><span>PyTorch</span><span>scikit-learn</span><span>MNE</span><span>pyRiemann</span><span>LightGBM</span><span>XGBoost</span><span>CatBoost</span><span>NumPy</span><span>pandas</span><span>Python</span><span>PyTorch</span><span>scikit-learn</span><span>MNE</span><span>pyRiemann</span><span>LightGBM</span><span>XGBoost</span><span>CatBoost</span><span>NumPy</span><span>pandas</span></div></div>
+  <div class="mq alt" data-dir="1"><div class="mq-in"><span>TypeScript</span><span>React</span><span>Next.js</span><span>NestJS</span><span>Node.js</span><span>Express</span><span>Flask</span><span>Tailwind</span><span>Three.js</span><span>Socket.IO</span><span>TypeScript</span><span>React</span><span>Next.js</span><span>NestJS</span><span>Node.js</span><span>Express</span><span>Flask</span><span>Tailwind</span><span>Three.js</span><span>Socket.IO</span></div></div>
+  <div class="mq" data-dir="-1"><div class="mq-in"><span>PostgreSQL</span><span>MongoDB</span><span>MySQL</span><span>SQLite</span><span>Prisma</span><span>Docker</span><span>Nx</span><span>Git</span><span>LSL</span><span>Linux</span><span>PostgreSQL</span><span>MongoDB</span><span>MySQL</span><span>SQLite</span><span>Prisma</span><span>Docker</span><span>Nx</span><span>Git</span><span>LSL</span><span>Linux</span></div></div>
+</section>
+
+<!-- PATH -->
+<section class="path" id="path">
+  <header class="sec-head">
+    <p class="eyebrow mono">Path</p>
+    <h2>From small tools<br>to systems.</h2>
+  </header>
+  <ol class="tl" id="tl">
+    <li><span class="yr mono">2023</span><div><h3>Licence final-year project</h3><p>A role-based university portal with timetables, grades, exams, files and real-time chat, built with a teammate.</p></div></li>
+    <li><span class="yr mono">2024</span><div><h3>Algorithms and bioinformatics</h3><p>String-matching algorithms from scratch with benchmarks, and a DNA sequence analyzer.</p></div></li>
+    <li><span class="yr mono">2025</span><div><h3>Master&rsquo;s project begins</h3><p>EEG baselines first, then an audit that found the leak, then a causal pipeline rebuilt around honest evaluation. A competition platform on the side.</p></div></li>
+    <li><span class="yr mono">2026</span><div><h3>Shipping</h3><p>Stockily, Elevate Digital and a voxel engine, alongside the final EEG write-up and a real-time replay.</p></div></li>
+  </ol>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <p class="eyebrow mono">Contact</p>
+  <h2>Let&rsquo;s build something<br><em>intelligent.</em></h2>
+  <p class="contact-sub">I&rsquo;m looking for AI engineering and full-stack roles. The fastest way to reach me is email.</p>
+  <div class="contact-row">
+    <button class="btn primary" id="copy" type="button" data-email="hannoun.amine25@gmail.com">hannoun.amine25@gmail.com <span id="copyState" class="mono">copy</span></button>
+    <a class="btn" href="https://www.linkedin.com/in/hannoun-amine/" target="_blank" rel="noopener">LinkedIn</a>
+    <a class="btn" href="https://github.com/ORD1STAR" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</section>
+</main>
+
+<footer class="foot mono">
+  <span>&copy; 2026 Hannoun Amine Amar</span>
+  <span>&gt; thanks for stopping by<i class="caret"></i></span>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
